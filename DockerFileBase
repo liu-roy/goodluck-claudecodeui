@@ -3,6 +3,8 @@ FROM ubuntu:22.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
+# 换用 Azure 镜像源，加速 GitHub Actions 构建
+RUN sed -i 's/archive.ubuntu.com/azure.archive.ubuntu.com/g' /etc/apt/sources.list
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     less procps fzf unzip jq nano vim xz-utils wget ca-certificates git \
