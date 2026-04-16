@@ -1,4 +1,4 @@
-name: Docker claude base CI
+name: docker claudecodeui base ci
 
 on:
   workflow_dispatch:
