@@ -1,0 +1,34 @@
+FROM liuroy/goodluck-claudecodeui-base:latest
+
+# 创建 cloudcli 用户并初始化目录
+RUN groupadd -r cloudcli && \
+    useradd -r -g cloudcli -d /home/cloudcli -m -s /bin/bash cloudcli && \
+    mkdir -p /home/cloudcli/.cloudcli /home/cloudcli/.claude /home/cloudcli/.m2 && \
+    echo 'source /etc/profile.d/version-switcher.sh' >> /home/cloudcli/.bashrc
+
+# 拷贝 Maven settings.xml
+COPY maven/conf/settings.xml /home/cloudcli/.m2/settings.xml
+
+COPY skills/ /home/cloudcli/.claude/skills/
+
+# Set environment variables
+ENV LANG=C.utf8
+ENV LC_ALL=C.utf8
+ENV TZ=Asia/Shanghai
+
+# 修改目录权限，确保 cloudcli 有访问权
+RUN chown -R cloudcli:cloudcli /home/cloudcli
+
+# ============================================
+# CloudCLI UI server
+# ============================================
+ENV HOST=0.0.0.0
+ENV SERVER_PORT=3001
+ENV HOME=/home/cloudcli
+
+USER cloudcli
+WORKDIR /home/cloudcli
+
+EXPOSE 3001
+
+CMD ["cloudcli", "start", "--port", "3001"]
