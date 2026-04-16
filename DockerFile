@@ -37,4 +37,4 @@ WORKDIR /home/goodluck
 
 EXPOSE 3001
 
-CMD ["cloudcli", "start", "--port", "3001"]
+CMD ["cloudcli", "--port", "3001"]
