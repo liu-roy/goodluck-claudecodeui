@@ -58,7 +58,7 @@ RUN wget -t 5 --waitretry=5 -O /tmp/node.tar.xz \
     ln -sf /usr/local/bin/npx /usr/bin/npx && \
     rm /tmp/node.tar.xz
 
-RUN npm install -g @anthropic-ai/claude-code@2.1.63
+RUN npm install -g @anthropic-ai/claude-code@2.1.110
 
 # ============================================
 # Helper scripts for switching versions

@@ -12,48 +12,12 @@ on:
   push:
     branches:
       - main
-      - feature/frontend-code-tree
-
 jobs:
   build:
     runs-on: ubuntu-22.04
 
     steps:
-      # 检出代码
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      # 设置 Maven 缓存
-      - name: Cache Maven repository
-        uses: actions/cache@v3
-        with:
-          path: ~/.m2/repository
-          key: maven-cache-${{ runner.os }}-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            maven-cache-${{ runner.os }}-
-
-      - name: Setup Java JDK
-        uses: actions/setup-java@v4.6.0
-        with:
-          # The Java version to set up. Takes a whole or semver Java version. See examples of supported syntax in README file
-          java-version: 17
-          # The path to the `.java-version` file. See examples of supported syntax in README file
-          distribution: zulu
-
-      # 设置maven setting
-      - name: Configure Maven settings
-        env:
-          # 使用环境变量中转是 GitHub 官方推荐的最稳妥做法
-          MAVEN_SETTINGS_CONTENT: ${{ secrets.MAVEN_SETTINGS }}
-        run: |
-          mkdir -p ~/.m2
-          echo "$MAVEN_SETTINGS_CONTENT" > ~/.m2/settings.xml
-          
-
-
-      # 使用 Maven 构建项目（-U 强制更新 SNAPSHOT 依赖）
-      - name: Build with Maven
-        run: mvn clean package -DskipTests -U -s ~/.m2/settings.xml
+      - uses: actions/checkout@v4
 
       - name: Build the Docker image
         run: docker build --tag liuroy/goodluck-claudecodeui-server --file ./DockerFile .

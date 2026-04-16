@@ -1,15 +1,21 @@
 FROM liuroy/goodluck-claudecodeui-base:latest
 
 # 创建 cloudcli 用户并初始化目录
-RUN groupadd -r cloudcli && \
-    useradd -r -g cloudcli -d /home/cloudcli -m -s /bin/bash cloudcli && \
-    mkdir -p /home/cloudcli/.cloudcli /home/cloudcli/.claude /home/cloudcli/.m2 && \
-    echo 'source /etc/profile.d/version-switcher.sh' >> /home/cloudcli/.bashrc
+RUN groupadd -r goodluck && \
+    useradd -r -g goodluck -d /home/goodluck -m -s /bin/bash goodluck && \
+    mkdir -p /home/goodluck/.cloudcli /home/goodluck/.claude /home/goodluck/.m2 && \
+    echo 'source /etc/profile.d/version-switcher.sh' >> /home/goodluck/.bashrc
 
 # 拷贝 Maven settings.xml
-COPY maven/conf/settings.xml /home/cloudcli/.m2/settings.xml
+COPY maven/conf/settings.xml /home/goodluck/.m2/settings.xml
 
-COPY skills/ /home/cloudcli/.claude/skills/
+COPY skills/ /home/goodluck/.claude/skills/
+
+# ============================================
+# Install CloudCLI (Claude Code UI)
+# Update this layer when a new cloudcli version is released
+# ============================================
+RUN npm install -g @cloudcli-ai/cloudcli
 
 # Set environment variables
 ENV LANG=C.utf8
@@ -17,17 +23,17 @@ ENV LC_ALL=C.utf8
 ENV TZ=Asia/Shanghai
 
 # 修改目录权限，确保 cloudcli 有访问权
-RUN chown -R cloudcli:cloudcli /home/cloudcli
+RUN chown -R goodluck:goodluck /home/goodluck
 
 # ============================================
 # CloudCLI UI server
 # ============================================
 ENV HOST=0.0.0.0
 ENV SERVER_PORT=3001
-ENV HOME=/home/cloudcli
+ENV HOME=/home/goodluck
 
-USER cloudcli
-WORKDIR /home/cloudcli
+USER goodluck
+WORKDIR /home/goodluck
 
 EXPOSE 3001
 
