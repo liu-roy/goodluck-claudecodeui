@@ -1,6 +1,6 @@
 FROM liuroy/goodluck-claudecodeui-base:latest
 
-# 创建 cloudcli 用户并初始化目录
+# 创建 goodluck 用户并初始化目录
 RUN groupadd -r goodluck && \
     useradd -r -g goodluck -d /home/goodluck -m -s /bin/bash goodluck && \
     mkdir -p /home/goodluck/.cloudcli /home/goodluck/.claude /home/goodluck/.m2 && \
